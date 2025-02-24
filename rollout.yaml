@@ -37,5 +37,5 @@ spec:
             matchTrafficWeight: true
       trafficRouting:
         alb:
-          ingress: dev-alb
+          ingress: dev-ingress
           servicePort: 80
