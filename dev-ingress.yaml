@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: dev-ingress
@@ -7,12 +7,14 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/load-balancer-name: dev-alb 
-    alb.ingress.kubernetes.io/healthcheck-path: /
 spec:
   rules:
     - http:
         paths:
-          - path: /*
+          - path: /
+            pathType: Prefix # Prefix | Exact
             backend:
-              serviceName: dev-svc-stable
-              servicePort: 80
+              service:
+                name: dev-svc-stable
+                port:
+                  name: use-annotation
