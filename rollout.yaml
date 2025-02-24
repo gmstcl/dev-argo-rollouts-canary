@@ -15,13 +15,13 @@ spec:
     spec:
       containers:
       - name: canary-rollouts-demo
-        image: particule/simplecolorapi:2.0
+        image: particule/simplecolorapi:1.0
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
   strategy:
     canary:
-      maxSurge: "25%"
+      maxSurge: "50%"
       maxUnavailable: 0
       steps:
       - setWeight: 25
