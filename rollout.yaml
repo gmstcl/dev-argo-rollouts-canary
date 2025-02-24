@@ -32,7 +32,7 @@ spec:
             weight: 10
         - pause:
             duration: 20s
-        - pause: 10s
+        - pause: {}
         - setCanaryScale:
             matchTrafficWeight: true
       trafficRouting:
