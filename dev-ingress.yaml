@@ -9,12 +9,16 @@ metadata:
     alb.ingress.kubernetes.io/load-balancer-name: dev-alb 
 spec:
   rules:
-    - http:
-        paths:
-          - path: /
-            pathType: Prefix # Prefix | Exact
-            backend:
-              service:
-                name: dev-svc-stable
-                port:
-                  number: 80
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            # serviceName must match either: canary.trafficRouting.alb.rootService (if specified),
+            # or canary.stableService (if rootService is omitted)
+            name: dev-svc-stable
+            # servicePort must be the value: use-annotation
+            # This instructs AWS Load Balancer Controller to look to annotations on how to direct traffic
+            port:
+              name: use-annotation
