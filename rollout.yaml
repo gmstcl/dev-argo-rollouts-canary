@@ -1,28 +1,41 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: canary-rollout
+  name: dev-canary-rollout
+  namespace: dev
 spec:
   replicas: 8
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: canary
+      app: dev
   template:
     metadata:
       labels:
-        app: canary
+        app: dev
     spec:
       containers:
-      - name: canary-rollouts-demo
-        image: particule/simplecolorapi:1.0
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 5000
+        - name: canary-rollouts-dev
+          image: particule/simplecolorapi:1.0
+          ports:
+            - containerPort: 5000
   strategy:
     canary:
-      maxSurge: "50%"
-      maxUnavailable: 0
+      canaryService: dev-svc-canary
+      stableService: dev-svc-stable
+      maxUnavailable: 1
+      maxSurge: "20%"
+      scaleDownDelaySeconds: 30
       steps:
-      - setWeight: 50
-      - pause: {}
+        - setWeight: 10
+        - setCanaryScale:
+            weight: 10
+        - pause:
+            duration: 20s
+        - pause: 10s
+        - setCanaryScale:
+            matchTrafficWeight: true
+      trafficRouting:
+        alb:
+          ingress: dev-alb
+          servicePort: 80

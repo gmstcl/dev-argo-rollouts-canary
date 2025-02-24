@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: canary-service
+  name: dev-svc-canary 
+  namespace: dev
 spec:
+  type: ClusterIP
   selector:
-    app: canary
+    app: dev
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5000
-  type: LoadBalancer
+      targetPort: 5000 
